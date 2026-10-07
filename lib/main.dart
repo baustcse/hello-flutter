@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'cgpa_calculator.dart';
+import 'study_timer.dart';
+import 'cse3100_page.dart';
 
 void main() {
   runApp(const QuickInfoApp());
 }
 
-/// A tiny data holder for one flashcard.
 class InfoCardData {
   final String category;
   final String content;
@@ -52,7 +54,27 @@ const List<InfoCardData> kCards = [
     author: 'State Basics',
     reference: 'api.flutter.dev',
   ),
+  InfoCardData(
+    category: 'Flutter Tutotial',
+    content:
+        'Flutter is a UI toolkit for building cross-platform applications.',
+    author: 'Md. Rakib Trofder',
+    reference: 'baust-flutter-learning.lovable.app',
+  ),
 ];
+
+const Map<String, double> kGradePoints = {
+  'A+': 4.00,
+  'A': 3.75,
+  'A-': 3.50,
+  'B+': 3.25,
+  'B': 3.00,
+  'B-': 2.75,
+  'C+': 2.50,
+  'C': 2.25,
+  'D': 2.00,
+  'F': 0.00,
+};
 
 class QuickInfoApp extends StatelessWidget {
   const QuickInfoApp({super.key});
@@ -60,7 +82,7 @@ class QuickInfoApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Quick Info',
+      title: 'BAUST Flutter Learning',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF4F46E5)),
@@ -70,6 +92,120 @@ class QuickInfoApp extends StatelessWidget {
     );
   }
 }
+
+class AppDrawer extends StatelessWidget {
+  const AppDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF4F46E5), Color(0xFF7C3AED)],
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Colors.white,
+                  child: Icon(Icons.school, size: 32, color: Color(0xFF4F46E5)),
+                ),
+                SizedBox(height: 12),
+                Text(
+                  'BAUST Learning',
+                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  'Student Tools',
+                  style: TextStyle(color: Color(0xFFE0E7FF), fontSize: 13),
+                ),
+              ],
+            ),
+          ),
+          _DrawerTile(
+            icon: Icons.flash_on,
+            title: 'Flashcards',
+            subtitle: 'Learning tips & quotes',
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (_) => const HomePage(),
+              ));
+            },
+          ),
+          _DrawerTile(
+            icon: Icons.computer,
+            title: 'CSE 3100',
+            subtitle: 'Course Info',
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (_) => const Cse3100Page(),
+              ));
+            },
+          ),
+          _DrawerTile(
+            icon: Icons.calculate,
+            title: 'CGPA Calculator',
+            subtitle: 'Compute your result',
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (_) => const CgpaCalculatorPage(),
+              ));
+            },
+          ),
+          _DrawerTile(
+            icon: Icons.timer,
+            title: 'Study Timer',
+            subtitle: 'Focus sessions (Pomodoro)',
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (_) => const StudyTimerPage(),
+              ));
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DrawerTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  const _DrawerTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Icon(icon, color: const Color(0xFF4F46E5)),
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+      subtitle: Text(subtitle),
+      onTap: onTap,
+    );
+  }
+}
+
+// ============================================================================
+// HOME PAGE (Flashcards)
+// ============================================================================
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -92,7 +228,13 @@ class _HomePageState extends State<HomePage> {
     final card = kCards[_index];
 
     return Scaffold(
-      // Subtly styled background: a soft vertical gradient.
+      appBar: AppBar(
+        title: const Text('Flashcards'),
+        centerTitle: true,
+        backgroundColor: const Color(0xFF4F46E5),
+        foregroundColor: Colors.white,
+      ),
+      drawer: const AppDrawer(),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -144,7 +286,10 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-/// The main focus card.
+// ============================================================================
+// SHARED UI: InfoCard, CategoryBadge, AuthorRow
+// ============================================================================
+
 class InfoCard extends StatelessWidget {
   final InfoCardData data;
 
@@ -167,12 +312,8 @@ class InfoCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              // ---- Category badge (pill tag) ----
               CategoryBadge(label: data.category),
-
               const SizedBox(height: 20),
-
-              // ---- Main content ----
               Text(
                 '“',
                 style: TextStyle(
@@ -192,12 +333,9 @@ class InfoCard extends StatelessWidget {
                   letterSpacing: 0.1,
                 ),
               ),
-
               const SizedBox(height: 24),
               const Divider(height: 1, color: Color(0xFFE2E8F0)),
               const SizedBox(height: 16),
-
-              // ---- Author / reference row ----
               AuthorRow(name: data.author, reference: data.reference),
             ],
           ),
@@ -207,7 +345,6 @@ class InfoCard extends StatelessWidget {
   }
 }
 
-/// Small pill tag at the top of the card.
 class CategoryBadge extends StatelessWidget {
   final String label;
 
@@ -235,7 +372,6 @@ class CategoryBadge extends StatelessWidget {
   }
 }
 
-/// Bottom row: avatar icon + name + reference.
 class AuthorRow extends StatelessWidget {
   final String name;
   final String reference;
