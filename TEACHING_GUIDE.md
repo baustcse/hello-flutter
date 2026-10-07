@@ -198,7 +198,72 @@ maps keyed by that enum.
 
 ---
 
-## Page 6 — Weather Table (10 min) · *real data from the internet*
+## Pages 6 & 7 — Class Routine + Course Cards (6 min total) · *the "before" picture*
+
+Teach these two **immediately before** the Weather Table page. They're deliberately plain: a table and
+a card list whose data is typed straight into the file. Their whole job is to separate two ideas
+students otherwise mash together — *how do I display a list?* and *how do I fetch data?*
+
+Say this up front, it's the entire point:
+
+> "These next two pages have no internet, no loading spinner, no error handling. The data is sitting
+> in the file as a `const` list. I want you to see the display code on its own first — because in
+> twenty minutes I'll show you the exact same table, with the exact same `DataTable` code, and the only
+> difference will be where the list came from."
+
+### Page 6 — Class Routine (3 min)
+
+**Show:** the drawer → Class Routine. Scroll it, then scroll it **sideways** so they see the extra
+columns.
+
+**Open:** `lib/routine_table_page.dart`. It's split into two commented steps — data, then page.
+
+Three things to land:
+
+- **`DataColumn` count must equal `DataCell` count.** Delete one `DataCell` and hot reload to show the
+  assertion error. Students hit this constantly; seeing the error once saves them an hour later.
+- **`List<DataRow>.generate`** turns N data objects into N rows. Pause on it: *"this is the loop that
+  turns data into UI. Every list-shaped screen you ever build has a loop like this in it."*
+- **The two nested `SingleChildScrollView`s** — one vertical, one horizontal. Ask *"why two?"* Remove
+  the horizontal one and let them watch the overflow stripes appear.
+
+**Live edit:** add a row to `kRoutine`. One object in, one row out, no other change. That's the lesson.
+
+### Page 7 — Course Cards (3 min)
+
+**Show:** the drawer → Course Cards. Six cards, each with icon, code, title, topic chips, teacher.
+
+**Open:** `lib/course_cards_page.dart`.
+
+Three things to land:
+
+- **`ListView.builder` vs `Column`.** *"A `Column` builds every child immediately, even the ones
+  off-screen. `ListView.builder` builds only what's visible, and builds more as you scroll. With six
+  courses it makes no difference. With six hundred, `Column` freezes the phone."*
+- **`_CourseTile` is extracted.** Point out that the page's `build()` is now about ten lines, because
+  one card lives in its own widget. Ask: *"what if I'd written all of this inline?"*
+- **`Wrap` instead of `Row`.** The topic chips use `Wrap`, so they flow onto a second line instead of
+  overflowing. Change a topic to a very long string and show `Row` breaking vs `Wrap` coping.
+
+**Live edit:** add a course to `kCourses` with a different `color` and `icon` — the card themes itself
+from its own data. Good moment to mention that passing colour *as data* is why one widget can render
+six different-looking cards.
+
+### The payoff, when you reach Page 8
+
+When the Weather Table loads, put the two files side by side on the projector. The `DataTable` block is
+nearly identical. Then say:
+
+> "Same table. Same loop. The only new thing on the weather page is that the list arrives from the
+> internet instead of from the file — so now it can be slow, and it can fail. That's what
+> `FutureBuilder` is for, and nothing else about the page changed."
+
+That comparison is the most efficient way to teach `async` I know of, because it reduces a scary topic
+to a single difference.
+
+---
+
+## Page 8 — Weather Table (10 min) · *real data from the internet*
 
 **Show:** the page loads, spinner appears briefly, table fills. Tap through cities. Scroll the table
 sideways. Hit refresh.
@@ -251,7 +316,7 @@ six columns don't fit a phone. Mention `WidgetStateProperty` for the alternating
 
 ---
 
-## Page 7 — Map (8 min) · *using someone else's package*
+## Page 9 — Map (8 min) · *using someone else's package*
 
 **Show:** pan and zoom with fingers. Tap the city chips. Tap the custom +/− buttons. Tap anywhere on
 the map to drop a red pin. Watch the info card coordinates update live.
@@ -301,6 +366,8 @@ Put the six pages back on the board as a ladder, and let them see they only lear
 | Flashcards | `setState` is how the screen learns that data changed. |
 | Drawer | `Navigator` is a stack of pages. |
 | CGPA | User input is always a String, and never trustworthy. |
+| Routine | A loop turns a list of data into a list of rows. |
+| Course Cards | `ListView.builder` builds only what's on screen. |
 | Timer | State can change on its own — and must be cleaned up. |
 | Weather | Network calls have three outcomes, not one. |
 | Map | Someone already built the hard part. |
@@ -355,6 +422,7 @@ Same code, both platforms. But building for iPhone needs a Mac and Xcode — see
 Give them twenty minutes and one of these:
 
 1. **Easy** — add three flashcards to `kCards` with your own content.
+2. **Easy** — add your own courses to `kCourses` on the Course Cards page, with your own icons and colours.
 2. **Easy** — add your hometown to `kPlaces` on the map page.
 3. **Medium** — add a "Previous card" button to the Flashcards page. (Watch for the negative-modulo
    trap: `(_index - 1) % length` goes wrong at zero in Dart.)

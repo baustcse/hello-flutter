@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'cgpa_calculator.dart';
 import 'study_timer.dart';
 import 'cse3100_page.dart';
+import 'routine_table_page.dart';
+import 'course_cards_page.dart';
 import 'weather_table_page.dart';
 import 'map_page.dart';
 
@@ -172,6 +174,28 @@ class AppDrawer extends StatelessWidget {
               Navigator.pop(context);
               Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (_) => const StudyTimerPage(),
+              ));
+            },
+          ),
+          _DrawerTile(
+            icon: Icons.grid_on,
+            title: 'Class Routine',
+            subtitle: 'Static table',
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (_) => const RoutineTablePage(),
+              ));
+            },
+          ),
+          _DrawerTile(
+            icon: Icons.view_agenda,
+            title: 'Course Cards',
+            subtitle: 'Static card list',
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (_) => const CourseCardsPage(),
               ));
             },
           ),
