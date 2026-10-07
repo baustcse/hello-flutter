@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Needed for the weather API and map tiles in RELEASE builds -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="hello_flutter"
         android:name="${applicationName}"

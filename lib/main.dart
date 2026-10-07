@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'cgpa_calculator.dart';
 import 'study_timer.dart';
 import 'cse3100_page.dart';
+import 'weather_table_page.dart';
+import 'map_page.dart';
 
 void main() {
   runApp(const QuickInfoApp());
@@ -170,6 +172,28 @@ class AppDrawer extends StatelessWidget {
               Navigator.pop(context);
               Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (_) => const StudyTimerPage(),
+              ));
+            },
+          ),
+          _DrawerTile(
+            icon: Icons.table_chart,
+            title: 'Weather Table',
+            subtitle: 'Live data from a public API',
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (_) => const WeatherTablePage(),
+              ));
+            },
+          ),
+          _DrawerTile(
+            icon: Icons.map,
+            title: 'Map',
+            subtitle: 'OpenStreetMap + markers',
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (_) => const MapPage(),
               ));
             },
           ),

@@ -69,6 +69,15 @@ class Cse3100Page extends StatelessWidget {
                             color: Color(0xFF64748B),
                           ),
                         ),
+                        SizedBox(height: 16),
+                        Text(
+                          'CSE, BAUST',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w500,
+                            color: Color.fromARGB(255, 139, 100, 105),
+                          ),
+                        ),
                       ],
                     ),
                   ),
